@@ -1,6 +1,6 @@
 # SElabGroup6
 This project creates an e-commerce web store using Python Django framework or Java Script
-Gavin Seiler galpha2021
+Gavin Seiler 
 Kevin Lopez Kev1225
-Granville (Gabe) Alpha
+Granville (Gabe) Alpha galpha2021
 Evertte Berkyaw

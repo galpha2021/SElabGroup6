@@ -9,7 +9,7 @@ This project creates an e-commerce web store using Python Django framework or Ja
 
 **Programming Langauges** <br />
   * Python with Django <br />
-  * SQL via mySQL <br />
+  * SQL via PostgreSQL <br />
   * HTML5 and CSS3 <br />
 
 **Project Description**

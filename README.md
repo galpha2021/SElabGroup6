@@ -2,15 +2,15 @@
 This project creates an e-commerce web store using Python Django framework or Java Script
 
 **Project Team members: <br />**
-..* Gavin Seiler (gjs153) (Siriusglow) (Starfighterred21@aol.com), front-end developer <br />
-..* Kevin Lopez (Kql13) (Kev1225) (kql13@msstate.edu), back-end developer <br />
-..* Granville (Gabe) Alpha (gba35) (galpha2021) (galpha2021@gmail.com), front-end developer and team leader <br />
-..* Evertte Berkyaw (eb1663) (Evertte Berkyaw) (eb1663@msstate.edu), back-end developer <br />
+  * Gavin Seiler (gjs153) (Siriusglow) (Starfighterred21@aol.com), front-end developer <br />
+  * Kevin Lopez (Kql13) (Kev1225) (kql13@msstate.edu), back-end developer <br />
+  * Granville (Gabe) Alpha (gba35) (galpha2021) (galpha2021@gmail.com), front-end developer and team leader <br />
+  * Evertte Berkyaw (eb1663) (Evertte Berkyaw) (eb1663@msstate.edu), back-end developer <br />
 
 **Programming Langauges** <br />
-..* Python with Django <br />
-..* SQL via mySQL <br />
-..* HTML5 and CSS3 <br />
+  * Python with Django <br />
+  * SQL via mySQL <br />
+  * HTML5 and CSS3 <br />
 
 **Project Description**
 The Webstore Management System is an e-commerce platform developed using Django, designed to facilitate online shopping for customers and product management for vendors. The system provides a seamless and secure environment for users to browse products, manage shopping carts, place orders, and complete transactions. It includes features such as product catalog management, shopping cart functionality, order processing, and payment integration. The platform is intended to serve three primary user classes: buyers, sellers, and administrators, each with distinct roles and functionalities. The system will be accessible via modern web browsers and Python 3.x with Django for development. The project aims to create a mission critical asset for the client organization. enabling them to generate revenue through online commerce.

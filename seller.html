@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Seller Administrative Portal</h1>
+
+<!-- FIXME: Validate the the user is logged in and that the account is seller -->
+
+<!-- FIXME: If logged in, show forms -->
+<h2>Add an Item</h2>
+
+<form>
+    #FIXME 
+	<label for="itemName">Item Name:</label><br>
+  	<input type="text" id="itemName" name="itemName"><br>
+    
+    <label for="itemDescription">Item Description:</label><br>
+	<input type="text" id="itemDescription" name="itemDescription"><br>
+
+    <!-- FIXME: Way to upload a photo of the item-->
+
+    <label for="price">Item Price in USD:</label><br>
+	<input type="text" id="price" name="price"><br>
+
+    <!-- FIXME: Populate the item vendor field of the user class with the currently logged-in user.-->
+
+    <label for="quantityToAdd">Please enter a quantity of the item to put for sale:</label><br>
+	<input type="text" id="price" name="price"><br>
+
+  <button>Submit</button>
+</form>
+<!-- FIXME: Upon submitting the form, direct output to admin class for approval. If approved, admin class will initate a SQL query.-->
+
+<h2>Update an Item</h2>
+
+<form>
+    <label for="itemName">Input the item you wish to update:</label><br>
+    <input type="text" id="itemName" name="itemName"><br>
+
+    <button>Submit</button>
+</form>
+<!-- FIXME: Upon submitting this form, query the database to check if the item exists, if so, allowing the following form to be viewed-->
+<p>Please input the values you wish to update. If you do not wish to update a particular value, please leave it blank</p>
+<form>
+    #FIXME 
+	<label for="itemName">Update Item Name:</label><br>
+  	<input type="text" id="itemName" name="itemName"><br>
+    
+    <label for="itemDescription">Update Item Description:</label><br>
+	<input type="text" id="itemDescription" name="itemDescription"><br>
+
+    <!-- FIXME: Way to upload a photo of the item-->
+
+    <label for="price">Update Item Price in USD:</label><br>
+	<input type="text" id="price" name="price"><br>
+
+    <!-- FIXME: Populate the item vendor field of the user class with the currently logged-in user.-->
+
+    <label for="quantityToAdd">Add a quantity of the items to put for sale:</label><br>
+	<input type="text" id="price" name="price"><br>
+
+  <button>Submit</button>
+</form>
+<!-- FIXME: Populate items automatically into the update query that were left blank. Automatic updates are from previous rendition.-->
+<!-- FIXME: Send update query to admin for verification -->
+
+<h2>Produce a Sales Report</h2>
+<form>
+    <label for="itemName">Item Name to Query:</label><br>
+    <input type="text" id="itemName" name="itemName"><br>
+
+	<label for="startDate">Start Date of Query:</label><br>
+  	<input type="text" id="startDate" name="startDate"><br>
+
+      <label for="endDate">End Date of Query:</label><br>
+  	<input type="text" id="endDate" name="endDate"><br>
+
+    <button>Submit</button>
+</form>
+<!-- FIXME: Send a query to the order tracking database with the set item and/or date range. Only include filled values in the query-->
+
+<!--FIXME: Item is not already in database for updating an item, show below-->
+<h2>Error Occured</h2>
+<p>The item you selected is not in the product database. Please add it using the Add an Item form</p>
+
+<!-- FIXME:Else user not logged in, show below -->
+<h2>Error Occured </h2>
+<p>Please make sure that the user is logged in as a Seller.</p>
+
+</body>
+</html>

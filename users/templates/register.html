@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create an Account</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to right, #667eea, #764ba2);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 40px 30px;
+      width: 100%;
+      max-width: 900px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-control, .form-select {
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: none;
+      border: 1px solid #ccc;
+      transition: 0.2s ease-in-out;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: #764ba2;
+      box-shadow: 0 0 0 0.2rem rgba(118, 75, 162, 0.25);
+    }
+
+    .btn-primary {
+      background-color: #5a67d8;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      font-weight: 600;
+      transition: 0.3s ease-in-out;
+    }
+
+    .btn-primary:hover {
+      background-color: #434190;
+    }
+
+    .alert {
+      border-radius: 10px;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-top: 30px;
+      color: #555;
+    }
+
+    @media (max-width: 768px) {
+      .form-section-title {
+        margin-top: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="glass-card">
+  <h2 class="text-center mb-4 text-dark">Create Your Account</h2>
+
+  {% if messages %}
+    <div class="mb-3">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="POST" action="{% url 'register' %}">
+    {% csrf_token %}
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label for="name" class="form-label">Full Name</label>
+        <input type="text" name="name" id="name" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label for="accountType" class="form-label">Account Type</label>
+        <select name="accountType" id="accountType" class="form-select" required>
+          <option value="Buyer">Buyer</option>
+          <option value="Seller">Seller</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label for="creditcard" class="form-label">Credit Card Number</label>
+        <input type="text" name="creditcard" id="creditcard" class="form-control" required>
+      </div>
+
+      <div class="col-md-3">
+        <label for="expirationdate" class="form-label">Expiration Date</label>
+        <input type="text" name="expirationdate" id="expirationdate" class="form-control" placeholder="MM/YY" required>
+      </div>
+
+      <div class="col-md-3">
+        <label for="securitycode" class="form-label">Security Code</label>
+        <input type="text" name="securitycode" id="securitycode" class="form-control" required>
+      </div>
+
+      <div class="col-md-8">
+        <label for="streetAddress" class="form-label">Street Address</label>
+        <input type="text" name="streetAddress" id="streetAddress" class="form-control" required>
+      </div>
+
+      <div class="col-md-4">
+        <label for="zip" class="form-label">Zip Code</label>
+        <input type="text" name="zip" id="zip" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label for="city" class="form-label">City</label>
+        <input type="text" name="city" id="city" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label for="state" class="form-label">State</label>
+        <select name="state" id="state" class="form-select" required>
+          <option value="" disabled selected>Select your state</option>
+          {% for code, state in states %}
+            <option value="{{ code }}">{{ state }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" name="username" id="username" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" name="password" id="password" class="form-control" required>
+      </div>
+
+      <div class="col-md-12">
+        <label for="retypepassword" class="form-label">Retype Password</label>
+        <input type="password" name="retypepassword" id="retypepassword" class="form-control" required>
+      </div>
+
+      <div class="col-12 d-grid mt-4">
+        <button type="submit" class="btn btn-primary">Create Account</button>
+      </div>
+
+      <div class="col-12 text-center mt-3">
+        <span>Already have an account?</span>
+        <a href="{% url 'login' %}" class="text-primary text-decoration-none fw-semibold">Login here</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -33,19 +33,19 @@ class RegisterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Customize login response
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        data = super().validate(attrs)
-        data['user'] = {
-            "id": self.user.id,
-            "username": self.user.username,
-            "email": self.user.email,
-            "role": self.user.role,
-        }
-        return data
+#class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+#    def validate(self, attrs):
+#        data = super().validate(attrs)
+#        data['user'] = {
+#            "id": self.user.id,
+#            "username": self.user.username,
+#            "email": self.user.email,
+#            "role": self.user.role,
+#        }
+#        return data
 
-class CustomLoginView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
+#class CustomLoginView(TokenObtainPairView):
+#    serializer_class = CustomTokenObtainPairSerializer
 
 class DeleteAccountView(APIView):
     permission_classes = [IsAuthenticated]
@@ -69,8 +69,9 @@ def login_view(request):
             return redirect('home')  
         else:
             return render(request, 'login.html', {'error': 'Invalid username or password'})
+            #changing login.htm to homepage.html
     
-    return render(request, 'login.html')
+    return render(request, 'homepage.html')
 
 
 
@@ -103,6 +104,7 @@ def register_view(request):
         city = request.POST['city']
         state = request.POST['state']
         zip_code = request.POST['zip']
+        email = request.POST['email']
 
         if password != retypepassword:
             messages.error(request, "Passwords do not match.")
@@ -121,6 +123,7 @@ def register_view(request):
                 city=city,
                 state=state,
                 zip_code=zip_code,
+                email=email,
             )
             user.save()
             messages.success(request, "Account created successfully!")
@@ -138,6 +141,9 @@ def register_view(request):
 
 @login_required
 def homepage_view(request):
+    
+
+
     return render(request, 'homepage.html')
 
 

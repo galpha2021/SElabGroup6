@@ -6,6 +6,9 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
 class CustomUser(AbstractUser):
+    def __str__(self):
+        return self.city  # or email, or any identifier you prefer
+
     USER_ROLES = (
         ('buyer', 'Buyer'),
         ('seller', 'Seller'),
@@ -21,12 +24,15 @@ class CustomUser(AbstractUser):
     city = models.CharField(max_length=100, default="Unknown")
     state = models.CharField(max_length=100, default="Unknown")
     zip_code = models.CharField(max_length=10, default="00000")
+    username = models.CharField(max_length=15, default="00000")
+    password = models.CharField(max_length=15, default="00000")
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
 
 class CustomItem():
+    id = models.BigAutoField(primary_key=True)
     item_name = models.CharField(max_length=100, default="Unknown")
     item_quantity = models.PositiveIntegerField()
     item_description = models.CharField(max_length=1000, default="Unknown")

@@ -9,6 +9,7 @@
 </head>
 <body>
 
+
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
@@ -22,6 +23,11 @@
                         <a class="nav-link active" href="#">Home</a>
                     </li>
                     <li class="nav-item">
+                        <form action="{% url 'delete_account' %}" method="POST" onsubmit="return confirm('Are you sure you want to delete your account?');">
+                            <button type="submit" class="btn btn-sm ms-2 mt-1" style="background-color: #6c757d; color: white; border: none;">Delete My Account</button>
+                        </form>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#">Shop</a>
                     </li>
                     <li class="nav-item">
@@ -31,7 +37,7 @@
                         <a class="nav-link" href="#">Contact</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
                     </li>
                 </ul>
             </div>
@@ -44,6 +50,7 @@
         <p>Your one-stop eCommerce destination for the best products.</p>
         <a href="#" class="btn btn-light btn-lg">Shop Now</a>
     </div>
+    
 
     <!-- Featured Products Section -->
     <div class="container my-5">

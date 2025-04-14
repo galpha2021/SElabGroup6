@@ -32,20 +32,6 @@ class RegisterView(APIView):
             return Response({"message": "User registered successfully!"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Customize login response
-#class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-#    def validate(self, attrs):
-#        data = super().validate(attrs)
-#        data['user'] = {
-#            "id": self.user.id,
-#            "username": self.user.username,
-#            "email": self.user.email,
-#            "role": self.user.role,
-#        }
-#        return data
-
-#class CustomLoginView(TokenObtainPairView):
-#    serializer_class = CustomTokenObtainPairSerializer
 
 class DeleteAccountView(APIView):
     permission_classes = [IsAuthenticated]
@@ -56,22 +42,20 @@ class DeleteAccountView(APIView):
         return Response({"message": "Your account has been deleted."}, status=status.HTTP_204_NO_CONTENT)
 
 
-
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        print("what is wrong with you?")
         user = authenticate(request, username=username, password=password)
-        print("Username")
-        if user is not None:
-            login(request, user)
-            return redirect('home')  
+        print("Authenticated user:", user)
+        if user is None:
+            return render(request, 'login.html', {'error': 'Invalid username or password'})  
         else:
-            return render(request, 'login.html', {'error': 'Invalid username or password'})
-            #changing login.htm to homepage.html
+            login(request, user)
+            return redirect('home') 
     
-    return render(request, 'homepage.html')
+    return render(request, 'login.html')
+
 
 
 
@@ -112,7 +96,7 @@ def register_view(request):
 
         try:
             CustomUser = get_user_model()
-            user = CustomUser.objects.create_user(
+            CustomUser.objects.create_user(
                 username=username,
                 password=password,
                 first_name=name,
@@ -125,7 +109,6 @@ def register_view(request):
                 zip_code=zip_code,
                 email=email,
             )
-            user.save()
             messages.success(request, "Account created successfully!")
             return redirect('login')
 
@@ -156,3 +139,7 @@ def logout_view(request):
 
 def loggedout_view(request):
     return render(request, 'loggedout.html')
+
+@login_required
+def seller_view(request):
+    return render(request, 'seller.html')

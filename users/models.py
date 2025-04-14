@@ -15,6 +15,7 @@ class CustomUser(AbstractUser):
         ('admin', 'Administrator'),
     )
     role = models.CharField(max_length=10, choices=USER_ROLES, default='buyer')
+    
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=100, default="Unknown")
     credit_card_number = models.CharField(max_length=20, default="0000000000000000")  # Default to a placeholder number
@@ -24,14 +25,14 @@ class CustomUser(AbstractUser):
     city = models.CharField(max_length=100, default="Unknown")
     state = models.CharField(max_length=100, default="Unknown")
     zip_code = models.CharField(max_length=10, default="00000")
-    username = models.CharField(max_length=15, default="00000")
-    password = models.CharField(max_length=15, default="00000")
+    username = models.CharField(max_length=50, unique=True)
+    #password = models.CharField(max_length=128)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
 
-class CustomItem():
+class CustomItem(models.Model):
     id = models.BigAutoField(primary_key=True)
     item_name = models.CharField(max_length=100, default="Unknown")
     item_quantity = models.PositiveIntegerField()
@@ -40,7 +41,7 @@ class CustomItem():
     item_vendor = models.CharField(max_length=1000)
     item_photo = models.ImageField(upload_to="./images", height_field=100, width_field=100)
 
-class CustomOrder():
+class CustomOrder(models.Model):
     ORDER_STATUS = (('delivered', 'Delivered'),
                     ('shipped', 'Shipped'),
                     ('ordered', 'Ordered')
@@ -54,9 +55,9 @@ class CustomOrder():
     order_id = models.PositiveIntegerField()
     arrivaltime = models.DateTimeField()
 
-class CustomShoppingCart():
-    number_items_in_cart = models.PositiveIntegerField(default=0)
-    user_cart_id = models.PositiveIntegerField()
-    cart_id = models.PositiveIntegerField()
-    total_price = models.DecimalField(max_digits=9, decimal_places=2)
-    checkout_item_list = ArrayField(CustomItem)
+#class CustomShoppingCart(models.Model):
+#    number_items_in_cart = models.PositiveIntegerField(default=0)
+#    user_cart_id = models.PositiveIntegerField()
+#    cart_id = models.PositiveIntegerField()
+#    total_price = models.DecimalField(max_digits=9, decimal_places=2)
+#    checkout_item_list = ArrayField(CustomItem)

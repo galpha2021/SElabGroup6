@@ -3,6 +3,7 @@
 # Create your models here.
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 class CustomUser(AbstractUser):
     USER_ROLES = (
@@ -25,3 +26,31 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = ['username']
 
 
+class CustomItem():
+    item_name = models.CharField(max_length=100, default="Unknown")
+    item_quantity = models.PositiveIntegerField()
+    item_description = models.CharField(max_length=1000, default="Unknown")
+    item_price = models.DecimalField(max_digits=9, decimal_places=2)
+    item_vendor = models.CharField(max_length=1000)
+    item_photo = models.ImageField(upload_to="./images", height_field=100, width_field=100)
+
+class CustomOrder():
+    ORDER_STATUS = (('delivered', 'Delivered'),
+                    ('shipped', 'Shipped'),
+                    ('ordered', 'Ordered')
+                    )
+    order_status = models.CharField(max_length=20, choices=ORDER_STATUS, default='ordered')
+    order_cost =  models.DecimalField(max_digits=9, decimal_places=2)
+    shipping_street_address = models.CharField(max_length=255, default="Unknown Address")
+    shipping_city = models.CharField(max_length=100, default="Unknown")
+    shipping_state = models.CharField(max_length=100, default="Unknown")
+    shipping_zip_code = models.CharField(max_length=10, default="00000")
+    order_id = models.PositiveIntegerField()
+    arrivaltime = models.DateTimeField()
+
+class CustomShoppingCart():
+    number_items_in_cart = models.PositiveIntegerField(default=0)
+    user_cart_id = models.PositiveIntegerField()
+    cart_id = models.PositiveIntegerField()
+    total_price = models.DecimalField(max_digits=9, decimal_places=2)
+    checkout_item_list = ArrayField(CustomItem)

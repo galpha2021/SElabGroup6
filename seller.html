@@ -1,91 +1,163 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Seller Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; }
+    .navbar-brand { font-weight: bold; }
+    .card-title i { margin-right: 0.5rem; }
+  </style>
+</head>
 <body>
 
-<h1>Seller Administrative Portal</h1>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Seller Portal</a>
+    <div class="ms-auto">
+      <div class="dropdown">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-person-circle fs-4 me-1"></i> Seller
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
+          <li><a class="dropdown-item" href="#">Profile</a></li>
+          <li><a class="dropdown-item" href="#">Settings</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
 
-<!-- FIXME: Validate the the user is logged in and that the account is seller -->
+<div class="container py-4">
 
-<!-- FIXME: If logged in, show forms -->
-<h2>Add an Item</h2>
+  <!-- ACCORDION SECTIONS -->
+  <div class="accordion shadow-sm" id="sellerAccordion">
 
-<form>
-    #FIXME 
-	<label for="itemName">Item Name:</label><br>
-  	<input type="text" id="itemName" name="itemName"><br>
-    
-    <label for="itemDescription">Item Description:</label><br>
-	<input type="text" id="itemDescription" name="itemDescription"><br>
+    <!-- Add Item -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingAdd">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdd" aria-expanded="true">
+          <i class="bi bi-plus-circle me-2"></i> Add an Item
+        </button>
+      </h2>
+      <div id="collapseAdd" class="accordion-collapse collapse show" data-bs-parent="#sellerAccordion">
+        <div class="accordion-body">
+          <form>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Item Name</label>
+                <input type="text" class="form-control" name="itemName">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Item Price ($)</label>
+                <input type="number" step="0.01" class="form-control" name="price">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" name="description" rows="2"></textarea>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Quantity</label>
+                <input type="number" class="form-control" name="quantity">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Upload Image</label>
+                <input type="file" class="form-control" name="image">
+              </div>
+              <div class="col-12 text-end">
+                <button class="btn btn-success mt-3"><i class="bi bi-send"></i> Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
-    <!-- FIXME: Way to upload a photo of the item-->
+    <!-- Update Item -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingUpdate">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUpdate">
+          <i class="bi bi-pencil-square me-2"></i> Update an Item
+        </button>
+      </h2>
+      <div id="collapseUpdate" class="accordion-collapse collapse" data-bs-parent="#sellerAccordion">
+        <div class="accordion-body">
+          <form>
+            <div class="mb-3">
+              <label class="form-label">Item to Update</label>
+              <input type="text" class="form-control">
+            </div>
+            <p class="text-muted">Leave fields blank if no update is needed.</p>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">New Name</label>
+                <input type="text" class="form-control">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">New Price ($)</label>
+                <input type="number" step="0.01" class="form-control">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">New Quantity</label>
+                <input type="number" class="form-control">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">New Image</label>
+                <input type="file" class="form-control">
+              </div>
+              <div class="col-12">
+                <label class="form-label">New Description</label>
+                <textarea class="form-control" rows="2"></textarea>
+              </div>
+              <div class="col-12 text-end">
+                <button class="btn btn-warning mt-3"><i class="bi bi-save"></i> Update</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
-    <label for="price">Item Price in USD:</label><br>
-	<input type="text" id="price" name="price"><br>
+    <!-- Sales Report -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingReport">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseReport">
+          <i class="bi bi-graph-up-arrow me-2"></i> Generate Sales Report
+        </button>
+      </h2>
+      <div id="collapseReport" class="accordion-collapse collapse" data-bs-parent="#sellerAccordion">
+        <div class="accordion-body">
+          <form>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Item Name</label>
+                <input type="text" class="form-control">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Date Range</label>
+                <div class="input-group">
+                  <input type="date" class="form-control">
+                  <input type="date" class="form-control">
+                </div>
+              </div>
+              <div class="col-12 text-end">
+                <button class="btn btn-info text-white mt-3"><i class="bi bi-bar-chart-line"></i> Generate</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
-    <!-- FIXME: Populate the item vendor field of the user class with the currently logged-in user.-->
+  </div>
 
-    <label for="quantityToAdd">Please enter a quantity of the item to put for sale:</label><br>
-	<input type="text" id="price" name="price"><br>
+</div>
 
-  <button>Submit</button>
-</form>
-<!-- FIXME: Upon submitting the form, direct output to admin class for approval. If approved, admin class will initate a SQL query.-->
-
-<h2>Update an Item</h2>
-
-<form>
-    <label for="itemName">Input the item you wish to update:</label><br>
-    <input type="text" id="itemName" name="itemName"><br>
-
-    <button>Submit</button>
-</form>
-<!-- FIXME: Upon submitting this form, query the database to check if the item exists, if so, allowing the following form to be viewed-->
-<p>Please input the values you wish to update. If you do not wish to update a particular value, please leave it blank</p>
-<form>
-    #FIXME 
-	<label for="itemName">Update Item Name:</label><br>
-  	<input type="text" id="itemName" name="itemName"><br>
-    
-    <label for="itemDescription">Update Item Description:</label><br>
-	<input type="text" id="itemDescription" name="itemDescription"><br>
-
-    <!-- FIXME: Way to upload a photo of the item-->
-
-    <label for="price">Update Item Price in USD:</label><br>
-	<input type="text" id="price" name="price"><br>
-
-    <!-- FIXME: Populate the item vendor field of the user class with the currently logged-in user.-->
-
-    <label for="quantityToAdd">Add a quantity of the items to put for sale:</label><br>
-	<input type="text" id="price" name="price"><br>
-
-  <button>Submit</button>
-</form>
-<!-- FIXME: Populate items automatically into the update query that were left blank. Automatic updates are from previous rendition.-->
-<!-- FIXME: Send update query to admin for verification -->
-
-<h2>Produce a Sales Report</h2>
-<form>
-    <label for="itemName">Item Name to Query:</label><br>
-    <input type="text" id="itemName" name="itemName"><br>
-
-	<label for="startDate">Start Date of Query:</label><br>
-  	<input type="text" id="startDate" name="startDate"><br>
-
-      <label for="endDate">End Date of Query:</label><br>
-  	<input type="text" id="endDate" name="endDate"><br>
-
-    <button>Submit</button>
-</form>
-<!-- FIXME: Send a query to the order tracking database with the set item and/or date range. Only include filled values in the query-->
-<!-- SELECT * from [table] WHERE userID=user's ID -->
-<!--FIXME: Item is not already in database for updating an item, show below-->
-<h2>Error Occured</h2>
-<p>The item you selected is not in the product database. Please add it using the Add an Item form</p>
-
-<!-- FIXME:Else user not logged in, show below -->
-<h2>Error Occured </h2>
-<p>Please make sure that the user is logged in as a Seller.</p>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

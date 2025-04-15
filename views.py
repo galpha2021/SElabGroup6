@@ -17,7 +17,7 @@ User = get_user_model()
 
 from django.contrib import messages
 from django.db import IntegrityError
-
+from store.models import Item
 
 from django.contrib.auth import logout
 from django.shortcuts import redirect
@@ -50,10 +50,12 @@ class CustomLoginView(TokenObtainPairView):
 class DeleteAccountView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def delete(self, request):
+    def post(self, request):
         user = request.user
+        logout(request)
         user.delete()
-        return Response({"message": "Your account has been deleted."}, status=status.HTTP_204_NO_CONTENT)
+        messages.success(request, "Your account has been deleted.")
+        return redirect('homepage')
 
 
 
@@ -140,6 +142,14 @@ def register_view(request):
 def homepage_view(request):
     return render(request, 'homepage.html')
 
+@login_required
+def seller_dashboard(request):
+    if request.user.role != 'seller':
+        return HttpResponseForbidden("You are not authorized to view this page.")
+
+    items = Item.objects.filter(vendor=request.user)
+    return render(request, 'seller_dashboard.html', {'items': items})
+
 
 def logout_view(request):
     if request.method == 'POST':
@@ -150,11 +160,3 @@ def logout_view(request):
 
 def loggedout_view(request):
     return render(request, 'loggedout.html')
-
-#####
-# users/views_seller.py
-
-@login_required
-def seller_view(request):
-    return render(request, 'seller.html')
-

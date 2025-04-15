@@ -4,6 +4,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+from django.contrib.auth import get_user_model
+
+
 
 class CustomUser(AbstractUser):
     def __str__(self):
@@ -14,7 +17,8 @@ class CustomUser(AbstractUser):
         ('seller', 'Seller'),
         ('admin', 'Administrator'),
     )
-    role = models.CharField(max_length=10, choices=USER_ROLES, default='buyer')
+    role = models.CharField(max_length=15, choices=USER_ROLES, default='buyer')
+    
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=100, default="Unknown")
     credit_card_number = models.CharField(max_length=20, default="0000000000000000")  # Default to a placeholder number
@@ -24,14 +28,15 @@ class CustomUser(AbstractUser):
     city = models.CharField(max_length=100, default="Unknown")
     state = models.CharField(max_length=100, default="Unknown")
     zip_code = models.CharField(max_length=10, default="00000")
-    username = models.CharField(max_length=15, default="00000")
-    password = models.CharField(max_length=15, default="00000")
+    username = models.CharField(max_length=50, unique=True)
+    #password = models.CharField(max_length=128)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
+    pass
 
 
-class CustomItem():
+class CustomItem(models.Model):
     id = models.BigAutoField(primary_key=True)
     item_name = models.CharField(max_length=100, default="Unknown")
     item_quantity = models.PositiveIntegerField()
@@ -40,7 +45,7 @@ class CustomItem():
     item_vendor = models.CharField(max_length=1000)
     item_photo = models.ImageField(upload_to="./images", height_field=100, width_field=100)
 
-class CustomOrder():
+class CustomOrder(models.Model):
     ORDER_STATUS = (('delivered', 'Delivered'),
                     ('shipped', 'Shipped'),
                     ('ordered', 'Ordered')
@@ -54,9 +59,24 @@ class CustomOrder():
     order_id = models.PositiveIntegerField()
     arrivaltime = models.DateTimeField()
 
-class CustomShoppingCart():
-    number_items_in_cart = models.PositiveIntegerField(default=0)
-    user_cart_id = models.PositiveIntegerField()
-    cart_id = models.PositiveIntegerField()
-    total_price = models.DecimalField(max_digits=9, decimal_places=2)
-    checkout_item_list = ArrayField(CustomItem)
+#class CustomShoppingCart(models.Model):
+#    number_items_in_cart = models.PositiveIntegerField(default=0)
+#    user_cart_id = models.PositiveIntegerField()
+#    cart_id = models.PositiveIntegerField()
+#    total_price = models.DecimalField(max_digits=9, decimal_places=2)
+#    checkout_item_list = ArrayField(CustomItem)
+class Item(models.Model):
+    User = get_user_model()
+    item_id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    description = models.TextField(default="No description")
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+    stock = models.PositiveIntegerField(default=1)
+    vendor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='items')
+    created_at = models.DateTimeField(auto_now_add=True)
+    item_photo = models.ImageField(
+    upload_to="images/",
+    default="images/default.jpg"
+    )
+def __str__(self):
+    return self.name

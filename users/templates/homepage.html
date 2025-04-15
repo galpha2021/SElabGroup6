@@ -18,9 +18,40 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
+                   <!--
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Home</a>
                     </li>
+                    <li class="nav-item">
+                        <form action="{% url 'delete_account' %}" method="POST" onsubmit="return confirm('Are you sure you want to delete your account?');">
+                            <button type="submit" class="btn btn-sm ms-2 mt-1" style="background-color: #6c757d; color: white; border: none;">Delete My Account</button>
+                        </form>
+                    </li>-->
+                    {% if user.is_authenticated %}
+                        {% ifuser.role == "seller" %}
+                        <!-- content for sellers -->
+                        {% endif %}
+                    <li class="nav-item">
+                        <span class="nav-link text-success">Welcome, {{ user.username }}     Role:  {{user.role}}</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    <li class="nav-item">
+                        <form action="{% url 'delete_account' %}" method="POST"
+                            onsubmit="return confirm('Are you sure you want to delete your account?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm ms-2 mt-1"
+                                style="background-color: #6c757d; color: white; border: none;">Delete My Account</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                {% endif %}
+
+        
                     <li class="nav-item">
                         <a class="nav-link" href="#">Shop</a>
                     </li>
@@ -30,9 +61,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contact</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
-                    </li>
+                    
                 </ul>
             </div>
         </div>

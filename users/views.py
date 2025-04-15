@@ -17,7 +17,7 @@ User = get_user_model()
 
 from django.contrib import messages
 from django.db import IntegrityError
-
+from .models import Item
 
 from django.contrib.auth import logout
 from django.shortcuts import redirect
@@ -32,28 +32,7 @@ class RegisterView(APIView):
             return Response({"message": "User registered successfully!"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Customize login response
-#class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-#    def validate(self, attrs):
-#        data = super().validate(attrs)
-#        data['user'] = {
-#            "id": self.user.id,
-#            "username": self.user.username,
-#            "email": self.user.email,
-#            "role": self.user.role,
-#        }
-#        return data
 
-#class CustomLoginView(TokenObtainPairView):
-#    serializer_class = CustomTokenObtainPairSerializer
-
-class DeleteAccountView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def delete(self, request):
-        user = request.user
-        user.delete()
-        return Response({"message": "Your account has been deleted."}, status=status.HTTP_204_NO_CONTENT)
 
 
 
@@ -61,17 +40,28 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        print("what is wrong with you?")
         user = authenticate(request, username=username, password=password)
-        print("Username")
-        if user is not None:
-            login(request, user)
-            return redirect('home')  
+        print("Authenticated user:", user)
+        if user is None:
+            return render(request, 'login.html', {'error': 'Invalid username or password'})  
         else:
-            return render(request, 'login.html', {'error': 'Invalid username or password'})
-            #changing login.htm to homepage.html
+            login(request, user)
+            return redirect('home') 
     
-    return render(request, 'homepage.html')
+    return render(request, 'login.html')
+
+
+
+def delete_account_view(request):
+    if request.user.is_authenticated:
+        #logout(request)
+        request.user.delete()
+        messages.success(request, "Account deleted.")
+        return redirect('homepage')
+    else:
+        return redirect('login')
+
+
 
 
 
@@ -105,6 +95,7 @@ def register_view(request):
         state = request.POST['state']
         zip_code = request.POST['zip']
         email = request.POST['email']
+        role = request.POST['accountType']
 
         if password != retypepassword:
             messages.error(request, "Passwords do not match.")
@@ -112,7 +103,7 @@ def register_view(request):
 
         try:
             CustomUser = get_user_model()
-            user = CustomUser.objects.create_user(
+            CustomUser.objects.create_user(
                 username=username,
                 password=password,
                 first_name=name,
@@ -124,8 +115,8 @@ def register_view(request):
                 state=state,
                 zip_code=zip_code,
                 email=email,
+                role=role
             )
-            user.save()
             messages.success(request, "Account created successfully!")
             return redirect('login')
 
@@ -141,18 +132,35 @@ def register_view(request):
 
 @login_required
 def homepage_view(request):
-    
 
-
+    role=request.user.role
+    print("User role is: ",role)
     return render(request, 'homepage.html')
 
 
+@login_required
+def seller_dashboard(request):
+    if request.user.role != 'seller':
+        seller_items = Item.objects.filter(vendor=request.user)
+    return render(request, 'seller_dashboard.html', {'items': seller_items})
+
 def logout_view(request):
     if request.method == 'POST':
-        logout(request)
+        #print("here")
+        #logout(request)
         return render(request, 'loggedout.html')  # Show confirmation page
     return render(request, 'logout.html')  # Ask for confirmation
 
 
+
+
 def loggedout_view(request):
+    role=request.user.id
+    print("User role is: ",role)
+    print("here")
+    logout(request)
     return render(request, 'loggedout.html')
+
+#@login_required
+#def seller_view(request):
+#    return render(request, 'seller.html')

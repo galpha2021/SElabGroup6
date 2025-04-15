@@ -13,4 +13,7 @@ urlpatterns = [
     path('loggedout/', views.loggedout_view, name='loggedout'),
     #path('seller/', views.seller_view, name='seller'),
     path('dashboard/', views.seller_dashboard, name='seller_dashboard'),
+    path('update/', views.update_view, name='update'),
+    path('', views.update_updatedb, name='update_updatedb')
+
 ]

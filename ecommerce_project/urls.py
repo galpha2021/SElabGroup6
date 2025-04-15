@@ -21,9 +21,11 @@ from . import e_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', e_views.homepage_view, name='homepage'),
+    path('', include('users.urls')),
     path('api/users/', include('users.urls')),
     path('login/', e_views.login_view, name='login'),
     path('logout/', e_views.logout_view, name='logout'),
-    path('loggedout/', e_views.loggedout_view, name='loggedout')
+    path('loggedout/', e_views.loggedout_view, name='loggedout'),
+    #path('seller/', include('store.urls')),
 ]
 

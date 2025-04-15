@@ -26,6 +26,5 @@ urlpatterns = [
     path('login/', e_views.login_view, name='login'),
     path('logout/', e_views.logout_view, name='logout'),
     path('loggedout/', e_views.loggedout_view, name='loggedout'),
-    #path('seller/', include('store.urls')),
 ]
 

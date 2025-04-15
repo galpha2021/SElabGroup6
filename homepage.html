@@ -22,7 +22,22 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Home</a>
                     </li>
-                    
+
+
+                    {% if user.is_authenticated and user.role == 'admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_users' %}">Manage Users</a>
+                    </li>
+                    {% endif %}
+
+                    {% if user.is_authenticated and user.role == 'admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_products' %}">Manage Products</a>
+                    </li>
+                    {% endif %}
+
+
+
                     {% if user.is_authenticated and user.role == 'seller' %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'seller_dashboard' %}">Seller Dashboard</a>

@@ -14,10 +14,13 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 User = get_user_model()
+from django.contrib.admin.views.decorators import staff_member_required
 
 from django.contrib import messages
 from django.db import IntegrityError
 from store.models import Item
+from .models import Item
+from django.http import HttpResponseForbidden
 
 from django.contrib.auth import logout
 from django.shortcuts import redirect
@@ -150,6 +153,26 @@ def seller_dashboard(request):
     items = Item.objects.filter(vendor=request.user)
     return render(request, 'seller_dashboard.html', {'items': items})
 
+@login_required
+def admin_monitor_users(request):
+    if request.user.role != 'admin':
+        return HttpResponseForbidden("Access denied.")
+    
+    User = get_user_model()
+    users = User.objects.all()
+    return render(request, 'admin_users.html', {'users': users})
+
+from .models import Item
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+
+@login_required
+def admin_monitor_products(request):
+    if request.user.role != 'admin':
+        return HttpResponseForbidden("Access denied.")
+    
+    items = Item.objects.all()
+    return render(request, 'admin_products.html', {'items': items})
 
 def logout_view(request):
     if request.method == 'POST':

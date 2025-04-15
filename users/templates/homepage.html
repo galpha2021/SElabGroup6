@@ -27,15 +27,23 @@
                             <button type="submit" class="btn btn-sm ms-2 mt-1" style="background-color: #6c757d; color: white; border: none;">Delete My Account</button>
                         </form>
                     </li>-->
-                    {% if user.is_authenticated %}
-                        {% ifuser.role == "seller" %}
-                        <!-- content for sellers -->
-                        {% endif %}
+                    {% if user.is_authenticated%}
                     <li class="nav-item">
-                        <span class="nav-link text-success">Welcome, {{ user.username }}     Role:  {{user.role}}</span>
+                        <span class="nav-link text-success">Welcome, {{ user.username }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;Role:  {{user.role}}</span>
                     </li>
+                    {% if user.role == 'Seller' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'seller' %}">Seller Dashboard</a>
+                    </li>
+                    {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'update' %}">Update Profile</a>
+                        </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Shop</a>
                     </li>
                     <li class="nav-item">
                         <form action="{% url 'delete_account' %}" method="POST"
@@ -45,23 +53,11 @@
                                 style="background-color: #6c757d; color: white; border: none;">Delete My Account</button>
                         </form>
                     </li>
-                {% else %}
+                    {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
                     </li>
-                {% endif %}
-
-        
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Shop</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About Us</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>
-                    
+                    {% endif %}                    
                 </ul>
             </div>
         </div>
@@ -71,14 +67,17 @@
     <div class="container-fluid bg-primary text-white text-center py-5">
         <h1>Welcome to ShopMaster!</h1>
         <p>Your one-stop eCommerce destination for the best products.</p>
-        <a href="#" class="btn btn-light btn-lg">Shop Now</a>
+        {% if not user.is_authenticated%}
+            <a href="{% url 'login' %}" class="btn btn-light btn-lg">Log In</a>
+        {% endif %}
     </div>
 
     <!-- Featured Products Section -->
+    <!--
     <div class="container my-5">
         <h2 class="text-center mb-4">Featured Products</h2>
         <div class="row row-cols-1 row-cols-md-3 g-4">
-            <!-- Product 1 -->
+            
             <div class="col">
                 <div class="card">
                     <img src="https://via.placeholder.com/300" class="card-img-top" alt="Product 1">
@@ -89,7 +88,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Product 2 -->
+            
             <div class="col">
                 <div class="card">
                     <img src="https://via.placeholder.com/300" class="card-img-top" alt="Product 2">
@@ -100,7 +99,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Product 3 -->
+            
             <div class="col">
                 <div class="card">
                     <img src="https://via.placeholder.com/300" class="card-img-top" alt="Product 3">
@@ -113,7 +112,23 @@
             </div>
         </div>
     </div>
-
+    -->
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for item in items %}
+        <div class="col">
+            <div class="card">
+                <img src="{{ item.item_photo.url }}" class="card-img-top" alt="{{ item.name }}" style="width: 200px; height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.name }}</h5>
+                    <p class="card-text">{{ item.description }}</p>
+                    <p class="card-text"><strong>${{ item.price }}</strong></p>
+                    <a href="#" class="btn btn-primary">Add to Cart</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
     <!-- Footer Section -->
     <footer class="bg-dark text-white text-center py-3">
         <p>&copy; 2025 ShopMaster | All rights reserved</p>

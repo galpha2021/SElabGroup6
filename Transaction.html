@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order History | ShopMaster</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f6;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .order-card {
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-card-header {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .order-status {
+            font-weight: bold;
+            color: #6c757d;
+        }
+
+        .order-items img {
+            max-height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .order-details {
+            padding: 1.5rem;
+            background-color: #fff;
+        }
+
+        .order-details h6 {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .order-details p {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+
+        .list-group-item {
+            border: none;
+            padding: 1.25rem;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .order-card-footer {
+            background-color: #f8f9fa;
+            border-radius: 0 0 10px 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #fff;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">ShopMaster</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="#">Shop</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h3 class="text-center mb-4">Your Order History</h3>
+    <hr>
+
+    <!-- Order 1 -->
+    <div class="order-card mb-4">
+        <div class="order-card-header p-3">
+            Order Number: 1234567890
+        </div>
+        <div class="order-details">
+            <p><strong>Purchase Date:</strong> April 10, 2025</p>
+            <p class="order-status"><strong>Status:</strong> Delivered</p>
+            <p><strong>Number of Items:</strong> 3</p>
+
+            <h6>Items Ordered:</h6>
+            <div class="list-group">
+                <div class="list-group-item">
+                    <div class="media">
+                        <img src="https://via.placeholder.com/100" class="mr-3" alt="Product Image">
+                        <div class="media-body">
+                            <h5>Product Name 1</h5>
+                            <p>Short description of the product.</p>
+                            <p><strong>Quantity:</strong> 1</p>
+                            <p><strong>Price:</strong> $19.99</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="media">
+                        <img src="https://via.placeholder.com/100" class="mr-3" alt="Product Image">
+                        <div class="media-body">
+                            <h5>Product Name 2</h5>
+                            <p>Short description of the product.</p>
+                            <p><strong>Quantity:</strong> 2</p>
+                            <p><strong>Price:</strong> $29.99</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="order-card-footer p-3 text-center">
+            Total: $79.97
+        </div>
+    </div>
+
+    <!-- Order 2 -->
+    <div class="order-card mb-4">
+        <div class="order-card-header p-3">
+            Order Number: 9876543210
+        </div>
+        <div class="order-details">
+            <p><strong>Purchase Date:</strong> April 5, 2025</p>
+            <p class="order-status"><strong>Status:</strong> Shipped</p>
+            <p><strong>Number of Items:</strong> 1</p>
+
+            <h6>Items Ordered:</h6>
+            <div class="list-group">
+                <div class="list-group-item">
+                    <div class="media">
+                        <img src="https://via.placeholder.com/100" class="mr-3" alt="Product Image">
+                        <div class="media-body">
+                            <h5>Product Name 3</h5>
+                            <p>Short description of the product.</p>
+                            <p><strong>Quantity:</strong> 1</p>
+                            <p><strong>Price:</strong> $49.99</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="order-card-footer p-3 text-center">
+            Total: $49.99
+        </div>
+    </div>
+
+    <!-- Order 3 (No Orders Example) -->
+    <div class="order-card mb-4">
+        <div class="order-card-header p-3">
+            Order Number: 1122334455
+        </div>
+        <div class="order-details">
+            <p><strong>Purchase Date:</strong> March 30, 2025</p>
+            <p class="order-status"><strong>Status:</strong> Pending</p>
+            <p><strong>Number of Items:</strong> 2</p>
+
+            <h6>Items Ordered:</h6>
+            <div class="list-group">
+                <div class="list-group-item">
+                    <div class="media">
+                        <img src="https://via.placeholder.com/100" class="mr-3" alt="Product Image">
+                        <div class="media-body">
+                            <h5>Product Name 4</h5>
+                            <p>Short description of the product.</p>
+                            <p><strong>Quantity:</strong> 1</p>
+                            <p><strong>Price:</strong> $15.99</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="media">
+                        <img src="https://via.placeholder.com/100" class="mr-3" alt="Product Image">
+                        <div class="media-body">
+                            <h5>Product Name 5</h5>
+                            <p>Short description of the product.</p>
+                            <p><strong>Quantity:</strong> 1</p>
+                            <p><strong>Price:</strong> $23.99</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="order-card-footer p-3 text-center">
+            Total: $39.98
+        </div>
+    </div>
+</div>
+
+<footer class="text-center py-3 mt-5">
+    <p>&copy; 2025 ShopMaster | All rights reserved</p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

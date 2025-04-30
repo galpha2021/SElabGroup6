@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Cart | ShopMaster</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f6;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .cart-card {
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-card-header {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .cart-items img {
+            max-height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .cart-details {
+            padding: 1.5rem;
+            background-color: #fff;
+        }
+
+        .cart-details h6 {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .cart-details p {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+
+        .list-group-item {
+            border: none;
+            padding: 1.25rem;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .cart-card-footer {
+            background-color: #f8f9fa;
+            border-radius: 0 0 10px 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #fff;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            margin-top: 20px;
+            font-size: 1.25rem;
+        }
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">ShopMaster</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Shop</a></li>
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h3 class="text-center mb-4">Your Shopping Cart</h3>
+    <hr>
+
+    <!-- Cart Item 1 -->
+    <div class="cart-card mb-4">
+        <div class="cart-card-header p-3">
+            Items in Your Cart
+        </div>
+        <div class="cart-details">
+            <h6>Items:</h6>
+            <div class="list-group">
+                <!-- Example Cart Item -->
+                <div class="list-group-item">
+                    <div class="media">
+                        <img src="https://via.placeholder.com/100" class="mr-3" alt="Product Image">
+                        <div class="media-body">
+                            <h5>Product Name 1</h5>
+                            <p>Short description of the product.</p>
+                            <p><strong>Quantity:</strong> 2</p>
+                            <p><strong>Price:</strong> $19.99 each</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Example Cart Item 2 -->
+                <div class="list-group-item">
+                    <div class="media">
+                        <img src="https://via.placeholder.com/100" class="mr-3" alt="Product Image">
+                        <div class="media-body">
+                            <h5>Product Name 2</h5>
+                            <p>Short description of the product.</p>
+                            <p><strong>Quantity:</strong> 1</p>
+                            <p><strong>Price:</strong> $29.99 each</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cart-card-footer p-3 text-center">
+            <h4><strong>Total: $69.97</strong></h4>
+        </div>
+    </div>
+
+    <!-- Place Order Button -->
+    <button class="btn btn-primary place-order-btn">Proceed to Checkout</button>
+
+</div>
+
+<footer class="text-center py-3 mt-5">
+    <p>&copy; 2025 ShopMaster | All rights reserved</p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

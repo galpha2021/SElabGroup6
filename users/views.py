@@ -42,7 +42,7 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        print("Authenticated user:", user)
+        print("Authenticated user:", user.username)
         if user is None:
             return render(request, 'login.html', {'error': 'Invalid username or password'})  
         else:
@@ -293,6 +293,10 @@ def seller_update_or_delete(request):
 
 
 def homepage_view(request):
-    items = Item.objects.all()[:3]  # Limit to 3 for featured
+    items = Item.objects.all()  # Limit to 3 for featured
     return render(request, 'homepage.html', {'items': items})
 
+@login_required
+def view_cart(request):
+    return render(request, 'Cart.html')
+    

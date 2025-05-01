@@ -29,21 +29,12 @@ class CustomUser(AbstractUser):
     state = models.CharField(max_length=100, default="Unknown")
     zip_code = models.CharField(max_length=10, default="00000")
     username = models.CharField(max_length=50, unique=True)
+    account_credits = models.BigIntegerField(default=10000)
     #password = models.CharField(max_length=128)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
     pass
-
-
-#class CustomItem(models.Model):
-#    id = models.BigAutoField(primary_key=True)
-#    item_name = models.CharField(max_length=100, default="Unknown")
-#    item_quantity = models.PositiveIntegerField()
-#    item_description = models.CharField(max_length=1000, default="Unknown")
-#    item_price = models.DecimalField(max_digits=9, decimal_places=2)
-#    item_vendor = models.CharField(max_length=1000)
-#    item_photo = models.ImageField(upload_to="./images", height_field=100, width_field=100)
 
 class CustomOrder(models.Model):
     ORDER_STATUS = (('delivered', 'Delivered'),
@@ -64,6 +55,9 @@ class CustomShoppingCart(models.Model):
     user_cart_id = models.PositiveIntegerField()
     cart_id = models.PositiveIntegerField()
     total_price = models.DecimalField(max_digits=9, decimal_places=2)
+
+
+
     #What to do
     #Fix this data base to make a primary key based on the cart
     #and have user id in this .

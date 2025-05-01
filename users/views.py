@@ -163,6 +163,31 @@ def loggedout_view(request):
     logout(request)
     return render(request, 'loggedout.html')
 
+def admin_monitor_users(request):
+    if request.user.role != 'Admin':
+        return redirect('home')  
+    users = User.objects.all() 
+    return render(request, 'admin_monitor_users.html', {'users': users})
+
+
+def admin_monitor_products(request):
+    if request.user.role != 'Admin':
+        return redirect('home')  
+    products = Item.objects.all()  
+    return render(request, 'admin_monitor_products.html', {'products': products})
+
+
+def admin_delete_account(request, user_id):
+    if request.user.role != 'Admin':
+        return redirect('home')  
+    try:
+        user = User.objects.get(id=user_id)
+        user.delete()  
+        messages.success(request, "Account successfully deleted.")
+    except User.DoesNotExist:
+        messages.error(request, "User not found.")
+    return redirect('admin_monitor_users')
+
 @login_required
 def update_view(request):
     print("Update.html page vistited")
@@ -299,4 +324,3 @@ def homepage_view(request):
 @login_required
 def view_cart(request):
     return render(request, 'Cart.html')
-    

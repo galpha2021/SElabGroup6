@@ -96,17 +96,28 @@
             background-color: #007bff;
             border: none;
             color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        .place-order-btn {
             width: 100%;
             margin-top: 20px;
             font-size: 1.25rem;
         }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .Shop-btn {
+            width: 100%;
+            margin-top: 20px;
+            font-size: 1.25rem;
+        }
+        .btn-primary-2 {
+            background-color: #02741b;
+            border: none;
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 1.25rem;
+        }
+
 
     </style>
 </head>
@@ -125,8 +136,6 @@
 <div class="container mt-5">
     <h3 class="text-center mb-4">Your Shopping Cart</h3>
     <hr>
-
-    <!-- Cart Item 1 -->
     <div class="cart-card mb-4">
         <div class="cart-card-header p-3">
             Items in Your Cart
@@ -134,40 +143,37 @@
         <div class="cart-details">
             <h6>Items:</h6>
             <div class="list-group">
-                <!-- Example Cart Item -->
+                {% for item in cart_items %}
                 <div class="list-group-item">
                     <div class="media">
-                        <img src="https://via.placeholder.com/100" class="mr-3" alt="Product Image">
+                        <img src="{{ item.item.item_photo.url }}" class="mr-3" alt="{{ item.item_name }}" width="100">
                         <div class="media-body">
-                            <h5>Product Name 1</h5>
-                            <p>Short description of the product.</p>
-                            <p><strong>Quantity:</strong> 2</p>
-                            <p><strong>Price:</strong> $19.99 each</p>
+                            <h5>{{ item.item_name }}</h5>
+                            <p>{{ item.item_description }}</p>
+                            <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                            <p><strong>Price:</strong> ${{ item.item_price }} each</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Example Cart Item 2 -->
-                <div class="list-group-item">
-                    <div class="media">
-                        <img src="https://via.placeholder.com/100" class="mr-3" alt="Product Image">
-                        <div class="media-body">
-                            <h5>Product Name 2</h5>
-                            <p>Short description of the product.</p>
-                            <p><strong>Quantity:</strong> 1</p>
-                            <p><strong>Price:</strong> $29.99 each</p>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
         <div class="cart-card-footer p-3 text-center">
-            <h4><strong>Total: $69.97</strong></h4>
+            <h4><strong>Total: ${{total_price }}</strong></h4>
         </div>
-    </div>
+      </div>
+      
+    
+      <form method="POST" action="{% url 'home' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary Shop-btn">Continue Shopping </button>
+    </form>
 
-    <!-- Place Order Button -->
-    <button class="btn btn-primary place-order-btn">Proceed to Checkout</button>
+
+    <form method="POST" action="{% url 'checkout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary-2 .Checkout-btn">Checkout </button>
+    </form>
 
 </div>
 

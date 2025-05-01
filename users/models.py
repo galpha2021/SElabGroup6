@@ -5,6 +5,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth import get_user_model
+from django.utils import timezone
+
 
 
 
@@ -29,39 +31,90 @@ class CustomUser(AbstractUser):
     state = models.CharField(max_length=100, default="Unknown")
     zip_code = models.CharField(max_length=10, default="00000")
     username = models.CharField(max_length=50, unique=True)
-    account_credits = models.BigIntegerField(default=10000)
+    country = models.CharField(max_length=100, default="Unknown")
+    account_balance=models.IntegerField(default=10000)
     #password = models.CharField(max_length=128)
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    #REQUIRED_FIELDS = ['email']
     pass
 
+
+
+
+class CustomShoppingCart(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='shopping_carts')
+    cart_id = models.AutoField(primary_key=True)
+    total_price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+
+
+class ShoppingCartItem(models.Model):
+    cart = models.ForeignKey(CustomShoppingCart, on_delete=models.CASCADE, related_name='cart_items')
+    item = models.ForeignKey('Item', on_delete=models.CASCADE)  # Direct reference to Item
+    quantity = models.PositiveIntegerField(default=1)
+
+    @property
+    def item_name(self):
+        return self.item.name
+
+    @property
+    def item_price(self):
+        return self.item.price
+
+    @property
+    def item_description(self):
+        return self.item.description
+
+    @property
+    def item_photo_url(self):
+        return self.item.item_photo.url
+
+    @property
+    def vendor_id(self):
+        return self.item.vendor.id
+
+
 class CustomOrder(models.Model):
-    ORDER_STATUS = (('delivered', 'Delivered'),
-                    ('shipped', 'Shipped'),
-                    ('ordered', 'Ordered')
-                    )
-    order_status = models.CharField(max_length=20, choices=ORDER_STATUS, default='ordered')
-    order_cost =  models.DecimalField(max_digits=9, decimal_places=2)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='custom_orders')
+    order_status = models.CharField(max_length=20, choices=[
+        ('delivered', 'Delivered'),
+        ('shipped', 'Shipped'),
+        ('ordered', 'Ordered')
+    ], default='ordered')
+    order_cost = models.DecimalField(max_digits=9, decimal_places=2)
     shipping_street_address = models.CharField(max_length=255, default="Unknown Address")
     shipping_city = models.CharField(max_length=100, default="Unknown")
     shipping_state = models.CharField(max_length=100, default="Unknown")
     shipping_zip_code = models.CharField(max_length=10, default="00000")
-    order_id = models.PositiveIntegerField()
-    arrivaltime = models.DateTimeField()
-
-class CustomShoppingCart(models.Model):
-    number_items_in_cart = models.PositiveIntegerField(default=0)
-    user_cart_id = models.PositiveIntegerField()
-    cart_id = models.PositiveIntegerField()
-    total_price = models.DecimalField(max_digits=9, decimal_places=2)
+    order_id = models.AutoField(primary_key=True)
+    ordertime = models.DateTimeField(default=timezone.now)
 
 
+class OrderItem(models.Model):
+    order = models.ForeignKey(CustomOrder, on_delete=models.CASCADE, related_name='order_items')
+    item = models.ForeignKey('Item', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
 
-    #What to do
-    #Fix this data base to make a primary key based on the cart
-    #and have user id in this .
-    
+    @property
+    def item_name(self):
+        return self.item.name
+
+    @property
+    def item_price(self):
+        return self.item.price
+
+    @property
+    def item_description(self):
+        return self.item.description
+
+    @property
+    def item_photo_url(self):
+        return self.item.item_photo.url
+
+    @property
+    def vendor_id(self):
+        return self.item.vendor.id
+
 class Item(models.Model):
     User = get_user_model()
     item_id = models.BigAutoField(primary_key=True)

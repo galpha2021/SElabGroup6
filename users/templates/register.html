@@ -84,6 +84,11 @@
         margin-top: 20px;
       }
     }
+    html, body {
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
   </style>
 </head>
 <body>
@@ -159,12 +164,21 @@
           {% endfor %}
         </select>
       </div>
+      
 
       <div class="col-md-6">
         <label for="username" class="form-label">Username</label>
         <input type="text" name="username" id="username" class="form-control" required>
       </div>
-
+      <div class="col-md-6">
+        <label for="country" class="form-label">Country</label>
+        <select name="country" id="country" class="form-select" required>
+          <option value="" disabled selected>Select your country</option>
+          {% for code, country in countries %}
+            <option value="{{ code }}">{{ country }}</option>
+          {% endfor %}
+        </select>
+      </div>
       <div class="col-md-6">
         <label for="email" class="form-label">Email</label>
         <input type="text" name="email" id="email" class="form-control" required>

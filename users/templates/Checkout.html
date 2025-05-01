@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction | ShopMaster</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f6;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .transaction-card {
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .transaction-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .transaction-card-header {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .transaction-details {
+            padding: 1.5rem;
+            background-color: #fff;
+        }
+
+        .transaction-details h6 {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .transaction-details p {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+
+        .payment-form {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-form .form-control {
+            margin-bottom: 1rem;
+        }
+
+        .payment-form button {
+            width: 100%;
+            font-size: 1.25rem;
+        }
+
+        .footer {
+            background-color: #343a40;
+            color: #fff;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="{% url 'home' %}">ShopMaster</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Shop</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h3 class="text-center mb-4">Checkout</h3>
+    <hr>
+
+    <!-- Transaction Details -->
+    <div class="transaction-card mb-4">
+        <div class="transaction-card-header p-3">
+            Your Order Summary
+        </div>
+        <div class="transaction-details">
+            <h6>Items in Your Order:</h6>
+            <ul class="list-group">
+                <!-- Example Cart Item -->
+                {% for item in cart_items %}
+                
+                    <div class="media">
+                        <img src="{{ item.item.item_photo.url }}" class="mr-3" alt="{{ item.item_name }}" width="100">
+                        <div class="media-body">
+                            <h5>{{ item.item_name }}</h5>
+                            <p>{{ item.item_description }}</p>
+                            <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                            <p><strong>Price:</strong> ${{ item.item_price }} each</p>
+                        
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- Example Cart Item 2 -->
+                
+            </ul>
+
+            <div class="text-center mt-3">
+                <h4><strong>Total: ex{{total}}</strong></h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Section -->
+    <div class="payment-form mb-4">
+        <h5 class="text-center mb-4">Confirm Payment</h5>
+
+        <form action="#" method="POST" id="paymentForm">
+            <div class="form-group">
+                <label for="currentBalance">Current Card Balance</label>
+                <input type="text" class="form-control" id="currentBalance" value="$UserBal" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="totalAmount">Amount to Deduct</label>
+                <input type="text" class="form-control" id="totalAmount" value="$TotalCost" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="remainingBalance">Remaining Balance</label>
+                <input type="text" class="form-control" id="remainingBalance" value="$NewBalance" disabled>
+            </div>
+
+            <button type="submit" class="btn btn-primary" onclick="deductAmount(event)">Place Order</button>
+        </form>
+    </div>
+</div>
+
+<footer class="footer text-center py-3 mt-5">
+    <p>&copy; 2025 ShopMaster | All rights reserved</p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

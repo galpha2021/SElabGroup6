@@ -61,6 +61,32 @@ def delete_account_view(request):
         return redirect('homepage')
     else:
         return redirect('login')
+    
+
+def admin_monitor_users(request):
+    if request.user.role != 'admin':
+        return redirect('home')  
+    users = User.objects.all() 
+    return render(request, 'admin_monitor_users.html', {'users': users})
+
+
+def admin_monitor_products(request):
+    if request.user.role != 'admin':
+        return redirect('home')  
+    products = Item.objects.all()  
+    return render(request, 'admin_monitor_products.html', {'products': products})
+
+
+def admin_delete_account(request, user_id):
+    if request.user.role != 'admin':
+        return redirect('home')  
+    try:
+        user = User.objects.get(id=user_id)
+        user.delete()  
+        messages.success(request, "Account successfully deleted.")
+    except User.DoesNotExist:
+        messages.error(request, "User not found.")
+    return redirect('admin_monitor_users')
 
 
 

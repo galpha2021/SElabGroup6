@@ -1,0 +1,28 @@
+{% for item in items %}
+          <div class="col">
+            <div class="card p-3 d-flex flex-column h-100" style="background-color: #f2f2f2; border: 2px solid black; min-height: 500px;">
+              <img src="{{ item.item_photo.url }}"
+                   class="card-img-top mx-auto d-block"
+                   alt="{{ item.name }}"
+                   style="width: 200px; height: 200px; object-fit: cover; border: 2px solid black;">
+                   <div class="card-body text-center d-flex flex-column justify-content-between">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                        <p class="card-text">{{ item.description }}</p>
+                        <p class="card-text">Stock: <strong>{{ item.stock}}</strong></p>
+                        <p class="card-text"><strong>${{ item.price }}</strong></p>
+                        {% if user.is_authenticated %}
+                        <form method="POST" action="{% url 'add_to_cart' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="item_id" value="{{ item.item_id }}">
+                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                        </form>
+                        {% endif %}
+                    </div>
+            </div>
+          </div>
+            
+{% empty %} 
+<div class="col"> 
+    <p class="text-center">No items found.</p> 
+</div> 
+{% endfor %}

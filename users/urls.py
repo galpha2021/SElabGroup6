@@ -28,5 +28,6 @@ urlpatterns = [
     path('admin/monitor/users/', views.admin_monitor_users, name='admin_monitor_users'),
     path('admin/monitor/products/', views.admin_monitor_products, name='admin_monitor_products'),
     path('admin/delete_account/<int:user_id>/', views.admin_delete_account, name='admin_delete_account'),
+    path('Terms and Services/', views.view_Terms, name='Terms and Services'),
 ]
 

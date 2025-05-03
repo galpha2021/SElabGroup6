@@ -6,8 +6,6 @@
     <title>Homepage - eCommerce Webstore</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
     <style>
     html, body {
         height: 100%;
@@ -19,7 +17,6 @@
         main {
         flex: 1;
         }
-        
     </style>
 </head>
 <body>
@@ -27,54 +24,74 @@
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">ShopMaster</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-      
-          <ul class="navbar-nav ms-auto align-items-center">
-            {% if user.is_authenticated %}
-            <li class="nav-item d-flex align-items-center me-2">
-              <a class="nav-link p-0" href="{% url 'view_cart' %}">
-                <i class="bi bi-cart" style="font-size: 1.8rem; color: white;"></i>
-              </a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
-                Welcome, {{ user.username }} ({{ user.role }})
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="{% url 'transactions' %}">Order History</a></li>
-      
-                    {% if user.role == 'Seller' %}
-                      <li><a class="dropdown-item" href="{% url 'seller' %}">Seller Dashboard</a></li>
-                    {% elif user.role == 'Admin' %}
-                      <li><a class="dropdown-item" href="{% url 'admin_monitor_users' %}">Monitor Users</a></li>
-                      <li><a class="dropdown-item" href="{% url 'admin_monitor_products' %}">Monitor Products</a></li>
-                    {% endif %}
-      
-                    <li><a class="dropdown-item" href="{% url 'update' %}">Update Account</a></li>
-                    <li>
-                      <form method="POST" action="{% url 'delete_account' %}" onsubmit="return confirm('Are you sure you want to delete your account?');">
-                        {% csrf_token %}
-                        <button class="dropdown-item text-danger fw-bold">Delete Account</button>
-                      </form>
+            <a class="navbar-brand" href="#">ShopMaster</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                   <!--
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Home</a>
                     </li>
-                    <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
-                  </ul>
-                </li>
-                
-              {% else %}
-                <li class="nav-item">
-                  <a class="nav-link text-white" href="{% url 'login' %}">Login</a>
-                </li>
-              {% endif %}
-      
-            </ul>
-          </div>
+                    <li class="nav-item">
+                        <form action="{% url 'delete_account' %}" method="POST" onsubmit="return confirm('Are you sure you want to delete your account?');">
+                            <button type="submit" class="btn btn-sm ms-2 mt-1" style="background-color: #6c757d; color: white; border: none;">Delete My Account</button>
+                        </form>
+                    </li>-->
+                    {% if user.is_authenticated and user.role == 'Admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'admin_monitor_users' %}">Monitor Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'admin_monitor_products' %}">Monitor Products</a>
+                        </li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        </li>
+                    {% endif %}
+
+                    {% if user.is_authenticated%}
+                    <li class="nav-item">
+                        <span class="nav-link text-success">Welcome, {{ user.username }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;Role:  {{user.role}}</span>
+                    </li>
+                    {% if user.role == 'Seller' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'seller' %}">Seller Dashboard</a>
+                    </li>
+                    {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'update' %}">Update Profile</a>
+                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_cart' %}">Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <form action="{% url 'delete_account' %}" method="POST"
+                            onsubmit="return confirm('Are you sure you want to delete your account?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm ms-2 mt-1"
+                                style="background-color: #6c757d; color: white; border: none;">Delete My Account</button>
+                        </form>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    {% endif %}
+                    <!-- Source: https://www.youtube.com/watch?v=e7PF0v33m5g&t=945s-->
+                    <input type="text" id="searchBar" class="form-control-sm mr-2" placeholder="Search items ..." />             
+                </ul>
+            </div>
         </div>
-      </nav>
-    
+    </nav>
+    <main>
     <!-- Hero Section -->
     <div class="container-fluid bg-primary text-white text-center py-5">
         <h1>Welcome to ShopMaster!</h1>
@@ -84,40 +101,92 @@
         {% endif %}
     </div>
 
-    <div class="container px-5 mt-4 mb-5">
+    <!-- Featured Products Section -->
+    <!--
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Featured Products</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            
+            <div class="col">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Product 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Product 1</h5>
+                        <p class="card-text">Description of product 1 goes here. It's a great item!</p>
+                        <a href="#" class="btn btn-primary">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Product 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Product 2</h5>
+                        <p class="card-text">Description of product 2 goes here. It's a must-have item!</p>
+                        <a href="#" class="btn btn-primary">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Product 3</h5>
+                        <p class="card-text">Description of product 3 goes here. A top-seller!</p>
+                        <a href="#" class="btn btn-primary">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    -->
+    <div class="container px-5 mt-4" id="item-container"> 
+        <div class="row row-cols-1 row-cols-md-3 g-4" id="item-grid"> 
+            {% for item in items %}
+            <div class="col"> 
+                <div class="card p-3" style="background-color: #f2f2f2; border: 2px solid black;"> 
+                    <img src="{{ item.item_photo.url }}" class="card-img-top mx-auto d-block" alt="{{ item.name }}" style="width: 200px; height: 200px; object-fit: cover; border: 2px solid black;"> 
+                    <div class="card-body text-center"> 
+                        <h5 class="card-title">{{ item.name }}</h5> 
+                        <p class="card-text">{{ item.description }}</p> 
+                        <p class="card-text"><strong>${{ item.price }}</strong></p> 
+                        <a href="#" class="btn btn-primary">Add to Cart</a> 
+                    </div> 
+                </div> 
+            </div> 
+            {% empty %} 
+            <div class="col"> 
+                <p class="text-center">No items found.</p> 
+            </div> 
+            {% endfor %}
+        </div>
+    </div>
+
+    <!--
+    <div class="container px-5 mt-4">
         <div class="row row-cols-1 row-cols-md-3 g-4">
           {% for item in items %}
           <div class="col">
-            <div class="card p-3 d-flex flex-column h-100" style="background-color: #f2f2f2; border: 2px solid black; min-height: 500px;">
+            <div class="card p-3" style="background-color: #f2f2f2; border: 2px solid black;">
               <img src="{{ item.item_photo.url }}"
                    class="card-img-top mx-auto d-block"
                    alt="{{ item.name }}"
                    style="width: 200px; height: 200px; object-fit: cover; border: 2px solid black;">
-                   <div class="card-body text-center d-flex flex-column justify-content-between">
-
+              <div class="card-body text-center">
                 <h5 class="card-title">{{ item.name }}</h5>
                 <p class="card-text">{{ item.description }}</p>
-                <p class="card-text">Total Stock: <strong>{{ item.stock}}</strong></p>
                 <p class="card-text"><strong>${{ item.price }}</strong></p>
-                {% if user.is_authenticated %}
-                  <form method="POST" action="{% url 'add_to_cart' %}">
-                {% csrf_token %}
-                <input type="hidden" name="item_id" value="{{ item.item_id }}">
-                <button type="submit" class="btn btn-primary">Add to Cart</button>
-                </form>
-                {% endif %}
+                <a href="#" class="btn btn-primary">Add to Cart</a>
               </div>
             </div>
           </div>
-      
           {% endfor %}
         </div>
-        </div>
-      </div>
-      
-    
-  
-      
+    </div>
+    --->
+
     </main>
     <!-- Footer Section -->
     <footer class="bg-dark text-white text-center py-3">
@@ -126,5 +195,7 @@
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script> document.getElementById('searchBar').addEventListener('input', function() { const query = this.value; fetch(`/homepage/?q=` + encodeURIComponent(query)) .then(response => response.text()) .then(html => { document.getElementById('item-grid').innerHTML = html; }); }); </script>
+
 </body>
 </html>

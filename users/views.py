@@ -446,7 +446,7 @@ def admin_delete_account(request, user_id):
     return redirect('admin_monitor_users')
 
 
-
-
-
+@login_required
+def view_Terms(request):
+    return render(request, 'Terms and Services.html')
     

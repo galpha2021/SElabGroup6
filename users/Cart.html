@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Cart | ShopMaster</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f6;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .cart-card {
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-card-header {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .cart-items img {
+            max-height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .cart-details {
+            padding: 1.5rem;
+            background-color: #fff;
+        }
+
+        .cart-details h6 {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .cart-details p {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+
+        .list-group-item {
+            border: none;
+            padding: 1.25rem;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .cart-card-footer {
+            background-color: #f8f9fa;
+            border-radius: 0 0 10px 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #fff;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 1.25rem;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .Shop-btn {
+            width: 100%;
+            margin-top: 20px;
+            font-size: 1.25rem;
+        }
+        .btn-primary-2 {
+            background-color: #02741b;
+            border: none;
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 1.25rem;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">ShopMaster</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Shop</a></li>
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h3 class="text-center mb-4">Your Shopping Cart</h3>
+    <hr>
+    <div class="cart-card mb-4">
+        <div class="cart-card-header p-3">
+            Items in Your Cart
+        </div>
+        <div class="cart-details">
+            <h6>Items:</h6>
+            <div class="list-group">
+                {% for item in cart_items %}
+                <div class="list-group-item">
+                    <div class="media">
+                        <img src="{{ item.item.item_photo.url }}" class="mr-3" alt="{{ item.item_name }}" width="100">
+                        <div class="media-body">
+                            <h5>{{ item.item_name }}</h5>
+                            <p>{{ item.item_description }}</p>
+                            <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                            <p><strong>Price:</strong> ${{ item.item_price }} each</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="cart-card-footer p-3 text-center">
+            <h4><strong>Total: ${{total_price }}</strong></h4>
+        </div>
+      </div>
+      
+    
+      <form method="POST" action="{% url 'home' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary Shop-btn">Continue Shopping </button>
+    </form>
+
+
+    <form method="POST" action="{% url 'checkout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary-2 .Checkout-btn">Checkout </button>
+    </form>
+
+</div>
+
+<footer class="text-center py-3 mt-5">
+    <p>&copy; 2025 ShopMaster | 
+        <a href="{% url 'Terms and Services' %}" class="text-blue-600 hover:underline">Terms and Services</a> | 
+        All rights reserved
+    </p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

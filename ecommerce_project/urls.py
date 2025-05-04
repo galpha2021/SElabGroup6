@@ -19,17 +19,17 @@ from django.urls import path, include
 from . import e_views
 from django.conf import settings
 from django.conf.urls.static import static
-#from .views import homepage_view
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', e_views.homepage_view, name='homepage'),
+    path('', e_views.login_view, name='homepage'),
     path('', include('users.urls')),
     path('api/users/', include('users.urls')),
     path('login/', e_views.login_view, name='login'),
     path('logout/', e_views.logout_view, name='logout'),
     path('loggedout/', e_views.loggedout_view, name='loggedout'),
-    #path("", homepage_view, name="home"),
+    
     
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

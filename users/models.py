@@ -32,7 +32,7 @@ class CustomUser(AbstractUser):
     zip_code = models.CharField(max_length=10, default="00000")
     username = models.CharField(max_length=50, unique=True)
     country = models.CharField(max_length=100, default="Unknown")
-    account_balance=models.IntegerField(default=10000)
+    account_balance=models.DecimalField(max_digits=20,decimal_places=2, default=10000.00)
     #password = models.CharField(max_length=128)
 
     USERNAME_FIELD = 'username'

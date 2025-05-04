@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from decimal import Decimal
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
@@ -18,10 +18,11 @@ from django.shortcuts import get_object_or_404, redirect
 
 from django.contrib import messages
 from django.db import IntegrityError
+from django.db.models import F, Sum
 
 from django.contrib.auth import logout
 from django.shortcuts import redirect
-from .models import Item, CustomShoppingCart, ShoppingCartItem
+from .models import Item, CustomShoppingCart, ShoppingCartItem, CustomOrder, OrderItem
 
 
 # Register View
@@ -42,7 +43,7 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        print("Authenticated user:", user.username)
+        #print("Authenticated user:", user.username)
         if user is None:
             return render(request, 'login.html', {'error': 'Invalid username or password'})  
         else:
@@ -193,15 +194,37 @@ def register_view(request):
 
 
 
+
 @login_required
 def seller_dashboard(request):
     items = Item.objects.filter(vendor=request.user)
-    return render(request, 'seller.html', {'items': items})
+    orders = CustomOrder.objects.prefetch_related('order_items__item').filter(order_items__item__vendor=request.user).distinct()
+    totals = []
+
+    for order in orders:
+        for item in order.order_items.all():
+            if item.item.vendor == request.user:
+                total = item.item.price * item.quantity
+                totals.append({
+                    'order_id': order.order_id,
+                    'buyer_id': order.user.id,
+                    'date': order.ordertime,
+                    'item': item.item.name,
+                    'quantity': item.quantity,
+                    'total_earned': total
+                })
+                
+    return render(request, 'seller.html', {
+    'items': items,
+    'orders': orders,
+    'sales_data': totals
+})
+
 
 def logout_view(request):
     if request.method == 'POST':
-        return render(request, 'loggedout.html')  # Show confirmation page
-    return render(request, 'logout.html')  # Ask for confirmation
+        return render(request, 'loggedout.html')  
+    return render(request, 'logout.html')  
 
 
 
@@ -282,8 +305,8 @@ def update_view(request):
         ('UZ', 'Uzbekistan'), ('VU', 'Vanuatu'), ('VE', 'Venezuela'), ('VN', 'Viet Nam'),
         ('YE', 'Yemen'), ('ZM', 'Zambia'), ('ZW', 'Zimbabwe'),
     ]
-
-    return render(request, 'update.html',{'states': US_STATES})
+    return render(request, 'update.html', {'states': US_STATES, 'countries': COUNTRIES})
+    
 
 @login_required
 def update_updatedb(request):
@@ -311,26 +334,55 @@ def update_updatedb(request):
     return redirect(request, "homepage.html")
 
 
+
+
+@login_required
 def add_item(request):
-    
-    if request.method == "POST":
-        name = request.POST['itemName']
-        description = request.POST['description']
-        price = request.POST['price']
-        stock = request.POST['quantity']
-        item_photo = request.FILES['image']
-        item = Item(
-            name=name,
-            description=description,
-            price=price,
-            stock=stock,
-            vendor=request.user,
-            item_photo=item_photo
-        )
-        item.save()
-    return redirect('seller')
+    valid_extensions = ('.jpg', '.gif', '.png', '.svg', '.pjp', '.pjpeg', '.jfif', '.webp', '.avif', '.tif', '.tiff', '.bmp', '.ico', '.cur')
+
+    if request.method == 'POST':
+        name = request.POST.get('itemName')
+        description = request.POST.get('description')
+        image = request.FILES.get('image')
+
+        try:
+            price = float(request.POST.get('price'))
+            quantity = int(request.POST.get('quantity'))
+        except (TypeError, ValueError):
+            messages.error(request, "Price must be a number and quantity must be an integer.")
+            return redirect('seller')
+
+        # Validate image extension
+        if image and not image.name.lower().endswith(valid_extensions):
+            messages.error(request, "Invalid image file type.")
+            return redirect('seller')
+
+        # Validate values
+        if price < 0 or quantity < 0:
+            messages.error(request, "Price and quantity must be non-negative.")
+            return redirect('seller')
+
+        if name and price is not None and quantity is not None and image:
+            Item.objects.create(
+                name=name,
+                price=price,
+                description=description,
+                stock=quantity,
+                item_photo=image,
+                vendor=request.user
+            )
+            messages.success(request, "Item listed successfully.")
+        else:
+            messages.error(request, "All fields are required.")
+
+        return redirect('seller')
+
+    return redirect('home')
+
 
 def seller_update_or_delete(request):
+    valid_extensions = ('.jpg', '.gif', '.png', '.jpg', '.svg', '.pjp', '.pjpeg', '.jfif', '.webp', '.avif', '.tif', '.tiff', 'bmp', '.ico', '.cur')
+
     if request.method == "POST":
         item_id = request.POST.get('item_id')
         action = request.POST.get('action')
@@ -347,18 +399,28 @@ def seller_update_or_delete(request):
             item.delete()
 
         elif action == "update":
+            
             name = request.POST.get('name')
             price = request.POST.get('price')
             stock = request.POST.get('stock')
             description = request.POST.get('description')
             image = request.FILES.get('image')
-
             if name: item.name = name
             if price: item.price = price
             if stock: item.stock = stock
             if description: item.description = description
-            if image: item.item_photo = image
+            print(f"The Image type is: {type(image)}")
+            print(f"The Image is: {image}")
+            if image: 
+                if not image.name.endswith(valid_extensions):
+                    return redirect('seller')
+                item.item_photo = image
 
+            if item.price < 0:
+                return redirect('seller')
+            if item.stock < 0:
+                return redirect('seller')
+            
             item.save()
 
     return redirect('seller')
@@ -367,10 +429,6 @@ def seller_update_or_delete(request):
 def homepage_view(request):
     items = Item.objects.all()
     return render(request, 'homepage.html', {'items': items})
-
-#@login_required
-#def view_cart(request):
-#    return render(request, 'Cart.html')
 @login_required
 def view_checkout(request):
     return render(request, 'Checkout.html')
@@ -384,41 +442,86 @@ def add_to_cart(request):
     if request.method == "POST":
         item_id = request.POST.get('item_id')
         item = get_object_or_404(Item, item_id=item_id)
+        print(f"Item Stock: {item.stock}")
+        if item.stock <= 0:
+            messages.error(request, f"Could not add item! Out of Stock!")
+            return redirect('home')
 
-        # Get or create cart for the current user
         cart, created = CustomShoppingCart.objects.get_or_create(user=request.user)
-
-        # Check if item already exists in the cart
         cart_item, created = ShoppingCartItem.objects.get_or_create(cart=cart, item=item)
 
-        if not created:
+        user_bal=request.user.account_balance
+        item_price=item.price
+        cart_items = ShoppingCartItem.objects.filter(cart=cart)
+        current_cart_cost = cart_items.aggregate(total=Sum(F('quantity') * F('item__price')))['total'] or 0
+
+        newCartprice=current_cart_cost+item_price
+
+
+
+        
+
+        if newCartprice > user_bal:
+            messages.error(request, f"Invalid add! Item is too expensive!")
+            return redirect('home')
+
+        if created:
+            # newly added to cart, quantity is already 1
+            pass
+        else:
+            if cart_item.quantity + 1 > item.stock:
+                messages.error(request, f"Not enough stock available.")
+                return redirect('home')
             cart_item.quantity += 1
             cart_item.save()
 
-        return redirect('view_cart')
+        messages.success(request, f"{item.name} added to cart!")
+        return redirect('home')
+        
     else:
         return redirect('home')
 
 
 
-@login_required
+
 def view_cart(request):
     cart, _ = CustomShoppingCart.objects.get_or_create(user=request.user)
-
     cart_items = ShoppingCartItem.objects.filter(cart=cart)
+    users_bal=request.user.account_balance
     total = 0
+    
 
-    print("The Items in the cart are:")
     for item in cart_items:
-        print(f"Item Name: {item.item.name}\tItem Price: {item.item.price}\tQuantity: {item.quantity}\tItem Photo URL: {item.item.item_photo.url}")
-        total += item.quantity * item.item.price
+        item_total = item.quantity * item.item.price
+        total += item_total
+    new_user_balance= users_bal-total
 
-    print(f"Cart Price: {total}")
+        
 
     return render(request, 'cart.html', {
         'cart_items': cart_items,
-        'total_price': total
+        'total_price': total,
+        'new_user_bal': new_user_balance
     })
+
+@login_required
+def remove_from_cart(request):
+    item_id = request.POST.get('item_id')
+    cart, _ = CustomShoppingCart.objects.get_or_create(user=request.user)
+    item = get_object_or_404(Item, item_id=item_id)
+    
+    try:
+        cart_item = ShoppingCartItem.objects.get(cart=cart, item=item)
+        if cart_item.quantity > 1:
+            cart_item.quantity -= 1
+            cart_item.save()
+        else:
+            cart_item.delete()
+        messages.success(request, f"Removed one {item.name} from cart.")
+    except ShoppingCartItem.DoesNotExist:
+        messages.error(request, "Item not found in cart.")
+
+    return redirect('view_cart')
 @login_required
 def admin_monitor_users(request):
     if request.user.role != 'Admin':
@@ -444,6 +547,69 @@ def admin_delete_account(request, user_id):
     except User.DoesNotExist:
         messages.error(request, "User not found.")
     return redirect('admin_monitor_users')
+
+
+@login_required
+def checkout(request):
+    cart, _ = CustomShoppingCart.objects.get_or_create(user=request.user)
+    cart_items = ShoppingCartItem.objects.filter(cart=cart)
+
+    if not cart_items:
+        messages.error(request, "Your cart is empty.")
+        return redirect('view_cart')
+
+    total_cost = sum(item.quantity * item.item.price for item in cart_items)
+
+    if request.user.account_balance < total_cost:
+        messages.error(request, "Insufficient funds.")
+        return redirect('view_cart')
+
+    # Deduct user balance
+    request.user.account_balance -= total_cost
+    request.user.save()
+
+    # Create order record
+    order = CustomOrder.objects.create(
+        user=request.user,
+        order_cost=total_cost,
+        shipping_street_address=request.user.street_address,
+        shipping_city=request.user.city,
+        shipping_state=request.user.state,
+        shipping_zip_code=request.user.zip_code,
+    )
+
+    # Move cart items to order and pay sellers
+    for cart_item in cart_items:
+        OrderItem.objects.create(
+            order=order,
+            item=cart_item.item,
+            quantity=cart_item.quantity
+        )
+
+        seller = cart_item.item.vendor
+        seller.account_balance += cart_item.quantity * cart_item.item.price
+        seller.save()
+
+        # Optionally update stock
+        cart_item.item.stock -= cart_item.quantity
+        cart_item.item.save()
+
+    # Clear the cart
+    cart_items.delete()
+
+    messages.success(request, "Checkout successful. Thank you for your purchase.")
+    return redirect('home')
+
+
+def search_items(request):
+    query = request.GET.get('q', '')
+    items = Item.objects.filter(name__icontains=query)
+    return render(request,'item_list.html',{'items': items})
+
+@login_required
+def view_Terms(request):
+    return render(request, 'Terms and Services.html')
+
 
 
 

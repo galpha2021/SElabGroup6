@@ -406,8 +406,8 @@ def seller_update_or_delete(request):
             description = request.POST.get('description')
             image = request.FILES.get('image')
             if name: item.name = name
-            if price: item.price = price
-            if stock: item.stock = stock
+            if price: item.price = float(price)
+            if stock: item.stock = int(stock)
             if description: item.description = description
             print(f"The Image type is: {type(image)}")
             print(f"The Image is: {image}")
@@ -456,10 +456,6 @@ def add_to_cart(request):
         current_cart_cost = cart_items.aggregate(total=Sum(F('quantity') * F('item__price')))['total'] or 0
 
         newCartprice=current_cart_cost+item_price
-
-
-
-        
 
         if newCartprice > user_bal:
             messages.error(request, f"Invalid add! Item is too expensive!")

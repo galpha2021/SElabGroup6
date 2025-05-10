@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction | ShopMaster</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f6;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .transaction-card {
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .transaction-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .transaction-card-header {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .transaction-details {
+            padding: 1.5rem;
+            background-color: #fff;
+        }
+
+        .transaction-details h6 {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .transaction-details p {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+
+        .payment-form {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-form .form-control {
+            margin-bottom: 1rem;
+        }
+
+        .payment-form button {
+            width: 100%;
+            font-size: 1.25rem;
+        }
+
+        .footer {
+            background-color: #343a40;
+            color: #fff;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">ShopMaster</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="#">Shop</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h3 class="text-center mb-4">Checkout</h3>
+    <hr>
+
+    <!-- Transaction Details -->
+    <div class="transaction-card mb-4">
+        <div class="transaction-card-header p-3">
+            Your Order Summary
+        </div>
+        <div class="transaction-details">
+            <h6>Items in Your Order:</h6>
+            <ul class="list-group">
+                <!-- Example Cart Item -->
+                <li class="list-group-item">
+                    <div class="media">
+                        <img src="https://via.placeholder.com/100" class="mr-3" alt="Product Image">
+                        <div class="media-body">
+                            <h5>Product Name 1</h5>
+                            <p>Short description of the product.</p>
+                            <p><strong>Quantity:</strong> 2</p>
+                            <p><strong>Price:</strong> $19.99 each</p>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Example Cart Item 2 -->
+                <li class="list-group-item">
+                    <div class="media">
+                        <img src="https://via.placeholder.com/100" class="mr-3" alt="Product Image">
+                        <div class="media-body">
+                            <h5>Product Name 2</h5>
+                            <p>Short description of the product.</p>
+                            <p><strong>Quantity:</strong> 1</p>
+                            <p><strong>Price:</strong> $29.99 each</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="text-center mt-3">
+                <h4><strong>Total: $69.97</strong></h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Section -->
+    <div class="payment-form mb-4">
+        <h5 class="text-center mb-4">Confirm Payment</h5>
+
+        <form action="#" method="POST" id="paymentForm">
+            <div class="form-group">
+                <label for="currentBalance">Current Card Balance</label>
+                <input type="text" class="form-control" id="currentBalance" value="$100.00" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="totalAmount">Amount to Deduct</label>
+                <input type="text" class="form-control" id="totalAmount" value="$69.97" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="remainingBalance">Remaining Balance</label>
+                <input type="text" class="form-control" id="remainingBalance" value="$30.03" disabled>
+            </div>
+
+            <button type="submit" class="btn btn-primary" onclick="deductAmount(event)">Place Order</button>
+        </form>
+    </div>
+</div>
+
+<footer class="footer text-center py-3 mt-5">
+    <p>&copy; 2025 ShopMaster | All rights reserved</p>
+</footer>
+
+<script>
+    function deductAmount(event) {
+        event.preventDefault();
+
+        // Get current balance and total amount
+        const currentBalance = parseFloat(document.getElementById('currentBalance').value.replace('$', ''));
+        const totalAmount = parseFloat(document.getElementById('totalAmount').value.replace('$', ''));
+
+        // Calculate remaining balance
+        const remainingBalance = currentBalance - totalAmount;
+
+        // Update the remaining balance input field
+        document.getElementById('remainingBalance').value = "$" + remainingBalance.toFixed(2);
+
+        // Here you would add the functionality to process the payment and complete the transaction (e.g., call to backend API)
+        alert("Order placed successfully! Remaining balance: $" + remainingBalance.toFixed(2));
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
